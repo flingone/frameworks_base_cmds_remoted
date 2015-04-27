@@ -1,0 +1,19 @@
+# CDT
+.cproject
+.project
+Debug
+
+# cmake
+CMakeCache.txt
+CMakeFiles/
+#CMakeLists.txt
+Makefile
+cmake_install.cmake
+
+# out
+out
+
+# libs
+#libs
+
+.idea
