@@ -75,6 +75,18 @@ IF(ANDROID)
  	)
 ENDIF(ANDROID)
 
+IF(FFOS)
+    SET(flint-libs
+        ${flint-libs}
+        log
+    )
+
+    SET(flint-src
+		${flint-src}
+		${FLINT_SRC}/utils/ifaddrs.c
+	)
+ENDIF(FFOS)
+
 IF(CMAKE_BUILD_PLATFORM STREQUAL "ffos")
 	SET(flint-src 
     	${flint-src} 

@@ -28,6 +28,7 @@ case $1 in
         -DCMAKE_CXX_COMPILER_ARG1=arm-linux-androideabi-g++  \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_BUILD_PLATFORM=ffos \
+        -DFFOS=TRUE \
         ../..
   make
   ;;

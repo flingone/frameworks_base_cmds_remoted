@@ -18,7 +18,7 @@
 #include <sys/errno.h>
 #include "Logging.h"
 
-#ifdef ANDROID
+#if (defined ANDROID) || (defined FFOS)
 
 #include <android/log.h>
 
@@ -72,7 +72,7 @@ void Logger::Impl::finish() {
 	stream_ << " - " << basename_ << ':' << line_ << "\033[0m" << '\n';
 }
 
-#ifdef ANDROID
+#if (defined ANDROID) || (defined FFOS)
 	bool Logger::DEBUG_FLAG = true;
 
 	void Logger::disable(){
@@ -106,7 +106,7 @@ Logger::~Logger() {
 	impl_.finish();
 	const LogStream::LogBuffer &buf(stream().buffer());
 
-#ifdef ANDROID
+#if (defined ANDROID) || (defined FFOS)
 	if (Logger::DEBUG_FLAG) {
 		switch(impl_.level_) {
 			case Logger::TRACE:

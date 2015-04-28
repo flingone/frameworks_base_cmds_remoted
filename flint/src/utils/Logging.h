@@ -75,7 +75,7 @@ public:
         return impl_.stream_;
     }
 
-#ifdef ANDROID
+#if (defined ANDROID) || (defined FFOS)
     static void enable();
 
     static void disable();
@@ -99,7 +99,7 @@ private:
 
     Impl impl_;
 
-#ifdef ANDROID
+#if (defined ANDROID) || (defined FFOS)
     static bool DEBUG_FLAG;
 #endif
 };
