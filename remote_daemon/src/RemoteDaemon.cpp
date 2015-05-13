@@ -37,8 +37,7 @@ void RemoteDaemon::onSessionConnect(flint::TCPSession * session) {
 	wrapper->Close.connect(
 			boost::bind(&RemoteDaemon::onSessionClose, this, ::_1));
 	wrapper->InputEvent.connect(
-			boost::bind(&RemoteDaemon::onInputEvent, this, ::_1, ::_2,
-					::_3));
+			boost::bind(&RemoteDaemon::onInputEvent, this, ::_1, ::_2, ::_3));
 	sessions_.push_back(wrapper);
 	LOG_INFO << "add: sessions size = " << sessions_.size();
 }
@@ -72,7 +71,7 @@ void RemoteDaemon::sendMessageToAllSessions(const std::string &message) {
 void RemoteDaemon::onInputEvent(int type, int code, int value) {
 	LOG_WARN << "received intput event: type = " << type << ", code = " << code
 			<< ", value = " << value;
-	InputEventHandler::sendEvent("/dev/input/event0", (unsigned int) type,
+	InputEventHandler::getInstance()->sendEvent((unsigned int) type,
 			(unsigned int) code, value);
 }
 

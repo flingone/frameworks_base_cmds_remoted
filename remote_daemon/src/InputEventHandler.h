@@ -23,14 +23,18 @@ class InputEventHandler {
 public:
 	virtual ~InputEventHandler();
 
+	static InputEventHandler * getInstance();
+
 private:
 	InputEventHandler();
-	static int sendEventInternal(const std::string& path, unsigned short type,
-			unsigned short code, unsigned int value);
+	int sendEventInternal(unsigned short type, unsigned short code,
+			unsigned int value);
 
 public:
-	static int sendEvent(const std::string& path, unsigned short type,
-			unsigned short code, unsigned int value);
+	int sendEvent(unsigned short type, unsigned short code, unsigned int value);
+
+private:
+	int fd_;
 };
 
 }

@@ -18,45 +18,54 @@
 
 namespace matchstick {
 
+static InputEventHandler *sInputEventHandler = NULL;
+
 InputEventHandler::InputEventHandler() {
 	// TODO Auto-generated constructor stub
-
+	fd_ = open("/dev/input/event0", O_RDWR);
+	if (fd_ < 0) {
+		LOG_ERROR << "could not open /dev/input/event0, " << strerror(errno);
+		fd_ = -1;
+	}
 }
 
 InputEventHandler::~InputEventHandler() {
 	// TODO Auto-generated destructor stub
 }
 
-int InputEventHandler::sendEvent(const std::string& path, unsigned short type,
-		unsigned short code, unsigned int value) {
+InputEventHandler* InputEventHandler::getInstance() {
+	if (sInputEventHandler == NULL) {
+		sInputEventHandler = new InputEventHandler();
+	}
+	return sInputEventHandler;
+}
+
+int InputEventHandler::sendEvent(unsigned short type, unsigned short code,
+		unsigned int value) {
 	int ret = 0;
-	ret = sendEventInternal(path, type, code, value);
+	ret = sendEventInternal(type, code, value);
 	if (ret != 0) {
 		return ret;
 	}
-	ret = sendEventInternal(path, 0, 0, 0);
+	ret = sendEventInternal(0, 0, 0);
 	return ret;
 }
 
-int InputEventHandler::sendEventInternal(const std::string& path,
-		unsigned short type, unsigned short code, unsigned int value) {
-	int fd;
+int InputEventHandler::sendEventInternal(unsigned short type,
+		unsigned short code, unsigned int value) {
+	if (fd_ < 0) {
+		LOG_ERROR << "illegal fd!!!";
+		return -1;
+	}
 	int ret;
 	int version;
 	struct input_event event;
-
-	fd = open(path.c_str(), O_RDWR);
-	if (fd < 0) {
-		LOG_ERROR << "could not open " << path.c_str() << ", "
-				<< strerror(errno);
-		return 1;
-	}
 
 	memset(&event, 0, sizeof(event));
 	event.type = type;
 	event.code = code;
 	event.value = value;
-	ret = write(fd, &event, sizeof(event));
+	ret = write(fd_, &event, sizeof(event));
 	if (ret < sizeof(event)) {
 		LOG_ERROR << "write event failed, " << strerror(errno);
 		return -1;
